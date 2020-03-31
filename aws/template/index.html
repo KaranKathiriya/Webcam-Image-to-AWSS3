@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Login V19</title>
+    <title>S3 Upload</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!--===============================================================================================-->
@@ -66,19 +66,76 @@
   </head>
 
   <body>
+    <!-- --------------------MODAL ------------------------------------------------------------------------->
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModalCenter"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              5 Easy Steps to Go
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>1. Fill All the Details.</p>
+            <p>2. Click On Capture Image</p>
+            <p>3. Webcam Will start on a popup or new window</p>
+            <p>
+              4. Set the webcam and <b>PRESS 's'</b> to caputre, image will be
+              directly uploaded if the filled details are correct.
+            </p>
+            <p>5. To <b>QUIT</b> webcam <b> PRESS 'q'</b></p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------------------------------------- -->
     <div class="limiter">
       <div class="container-login100">
         <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
-          <div class="login100-form validate-form" id="fname">
+          <form
+            class="login100-form validate-form"
+            id="fname"
+            action="capture_img"
+            method="POST"
+          >
             {% csrf_token %}
             <span class="login100-form-title p-b-33">
               Webcam Image To S3
             </span>
+            <div class="wrap-input100 rs1">
+              {% for message in messages %} {{message}} {% endfor %}
+            </div>
             <div class="wrap-input100 validate-input">
               <input
                 class="input100"
                 type="text"
                 id="ak"
+                name="ak"
                 placeholder="Access Key"
                 required
               />
@@ -89,6 +146,7 @@
                 class="input100"
                 type="text"
                 id="sk"
+                name="sk"
                 placeholder="Secret Key"
                 required
               />
@@ -98,7 +156,19 @@
               <input
                 class="input100"
                 type="text"
+                id="bk"
+                name="bk"
+                placeholder="Bucket Name"
+                required
+              />
+            </div>
+            <br />
+            <div class="wrap-input100 validate-input">
+              <input
+                class="input100"
+                type="text"
                 id="filename"
+                name="filename"
                 placeholder="S3 filename"
                 required
               />
@@ -119,6 +189,17 @@
                 Sign up
               </a> -->
             </div>
+          </form>
+          <br />
+          <div class="text-center">
+            <button
+              type="button"
+              class="login100-form-btn"
+              data-toggle="modal"
+              data-target="#exampleModalCenter"
+            >
+              Instructions
+            </button>
           </div>
         </div>
       </div>
@@ -144,23 +225,32 @@
 </html>
 
 <script>
-  $("#capture").click(function() {
-    $.ajax({
-      type: "POST",
-      url: "capture_img",
-      /*async: true,*/
-      data: {
-        ak: $("#ak").val(),
-        sk: $("#sk").val(),
-        name: $("#filename").val(),
-        csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-      },
-      success: function() {
-        alert("Image Captured");
-        flag = 1;
-      }
-    });
-
-    /*return false;*/
-  });
+  /*$("#capture").click(function() {
+    if (
+      $("#ak").val() != "" &&
+      $("#sk").val() != "" &&
+      $("#bk").val() != "" &&
+      $("#filename").val() != ""
+    ) {
+      $.ajax({
+        type: "POST",
+        url: "capture_img",
+        /*async: true,
+        data: {
+          ak: $("#ak").val(),
+          sk: $("#sk").val(),
+          bk: $("#bk").val(),
+          name: $("#filename").val(),
+          csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+        } /*,
+        success: function() {
+          alert("Image Captured");
+          flag = 1;
+        }
+      });
+    } else {
+      alert("Please Fill all the details");
+    }
+    /*return false;
+  });*/
 </script>
