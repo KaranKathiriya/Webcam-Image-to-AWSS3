@@ -23,7 +23,7 @@ def capture_img(request):
     global ACCESS_KEY
     global SECRET_KEY
     global flag
-    if request.method == 'POST' and flag == 0:
+    if request.method == 'POST':
         flag = 1
         name = request.POST['filename']
         filename = name + ".jpg"
@@ -96,5 +96,6 @@ def capture_img(request):
             bucket = ""
             return render(request, 'index.html')
     else:
+        #flag = 0
         messages.info(request, 'Please fill all the details')
         return render(request, 'index.html')
